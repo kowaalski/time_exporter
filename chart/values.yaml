@@ -1,0 +1,44 @@
+# -- The main name of all kubernetes resources.
+name: time-exporter
+# -- The Kubernetes namespace where the resources will be deployed.
+namespace: monitoring
+
+# -- Number of replicas for the time-exporter deployment.
+replicas: 1
+
+image:
+  # -- The ECR image repository for the time-exporter.
+  repository: xxxx
+  # -- The tag of the image on ECR to be used.
+  tag: v0.1.0
+  # -- Options are "Always", "IfNotPresent", or "Never". 
+  # -- "Always" forces Kubernetes to pull always the image on ECR on every deployment. 
+  # -- "IfNotPresent" pulls the image only if it is not already present on the node (default behavior). 
+  # -- "Never" prevents Kubernetes from pulling the image, expecting it to be already present on the node.
+  # -- The image pull policy to be used by Kubernetes. 
+  pullPolicy: Always
+
+# -- The port on which the container will listen.
+containerPort: 8000
+
+deployment:
+  # -- Specifies whether to create the deployment.
+  create: true
+
+service:
+  # -- Specifies whether to create the Kubernetes service.
+  create: true
+  # -- Type of the Kubernetes service (e.g., ClusterIP, NodePort, LoadBalancer).
+  type: ClusterIP
+  # -- The protocol used by the service (e.g., TCP, UDP).
+  protocol: TCP
+  # -- The port number on which the service will be exposed.
+  port: 8000
+
+serviceMonitor:
+  # -- Specifies whether to create the ServiceMonitor.
+  create: true
+  # -- The HTTP path to scrape metrics from the time-exporter.
+  path: "/metrics"
+  # -- The interval at which Prometheus will scrape metrics from the time-exporter.
+  interval: 60s
